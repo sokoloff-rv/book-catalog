@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Subscription;
+use Yii;
 use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -9,6 +10,10 @@ use yii\widgets\ActiveForm;
 /** @var Subscription $subscriptionModel */
 
 $modalId = 'subscriptionModal';
+
+if (!Yii::$app->user->isGuest && empty($subscriptionModel->phone)) {
+    $subscriptionModel->phone = Yii::$app->user->identity->phone;
+}
 ?>
 
 <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
