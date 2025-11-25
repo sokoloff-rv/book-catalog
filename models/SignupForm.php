@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 
 class SignupForm extends Model
@@ -49,6 +50,14 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->status = User::STATUS_ACTIVE;
 
-        return $user->save() ? $user : null;
+        if (!$user->save()) {
+            return null;
+        }
+
+        if (($role = Yii::$app->authManager->getRole('user')) !== null) {
+            Yii::$app->authManager->assign($role, $user->id);
+        }
+
+        return $user;
     }
 }
