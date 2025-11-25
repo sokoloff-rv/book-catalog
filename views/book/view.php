@@ -39,6 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            [
+                'label' => 'Авторы',
+                'value' => $model->authors
+                    ? implode(', ', array_map(fn ($author) => $author->full_name, $model->authors))
+                    : 'Авторы не указаны',
+                'format' => 'ntext',
+            ],
             'publish_year',
             'description:ntext',
             'isbn',

@@ -19,11 +19,14 @@ use yii\helpers\Url;
  *
  * @property Author[] $authors
  * @property BookAuthor[] $BookAuthor
+ * @property int[] $authorIds
  * @property SmsLog[] $smsLogs
  */
 class Book extends \yii\db\ActiveRecord
 {
 
+    /** @var int[] List of IDs of selected authors. */
+    public array $authorIds = [];
 
     /**
      * {@inheritdoc}
@@ -45,6 +48,7 @@ class Book extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['title', 'cover_path'], 'string', 'max' => 255],
             [['isbn'], 'string', 'max' => 32],
+            ['authorIds', 'each', 'rule' => ['integer']],
         ];
     }
 
@@ -62,6 +66,7 @@ class Book extends \yii\db\ActiveRecord
             'cover_path' => 'Ссылка на обложку',
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
+            'authorIds' => 'Авторы',
         ];
     }
 
@@ -70,7 +75,7 @@ class Book extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthor()
+    public function getAuthors()
     {
         return $this->hasMany(Author::class, ['id' => 'author_id'])->viaTable('book_authors', ['book_id' => 'id']);
     }
@@ -93,6 +98,54 @@ class Book extends \yii\db\ActiveRecord
     public function getSmsLog()
     {
         return $this->hasMany(SmsLog::class, ['book_id' => 'id']);
+    }
+
+    /**
+     * Synchronizes selected authors with the relations table.
+     */
+    protected function syncAuthors(): void
+    {
+        $newAuthorIds = array_unique(array_map('intval', $this->authorIds));
+        sort($newAuthorIds);
+
+        $currentAuthorIds = $this->getBookAuthor()->select('author_id')->column();
+        sort($currentAuthorIds);
+
+        $toAdd = array_diff($newAuthorIds, $currentAuthorIds);
+        $toRemove = array_diff($currentAuthorIds, $newAuthorIds);
+
+        if ($toRemove) {
+            BookAuthor::deleteAll([
+                'book_id' => $this->id,
+                'author_id' => $toRemove,
+            ]);
+        }
+
+        foreach ($toAdd as $authorId) {
+            $link = new BookAuthor([
+                'book_id' => $this->id,
+                'author_id' => $authorId,
+            ]);
+            $link->save();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->syncAuthors();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->authorIds = $this->getAuthors()->select('id')->column();
     }
 
     /**

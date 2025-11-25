@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Book;
 use app\models\BookSearch;
+use app\models\Author;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -90,6 +91,7 @@ class BookController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'authorList' => $this->getAuthorList(),
         ]);
     }
 
@@ -110,6 +112,7 @@ class BookController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'authorList' => $this->getAuthorList(),
         ]);
     }
 
@@ -141,5 +144,19 @@ class BookController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Returns a list of authors for form elements.
+     *
+     * @return array<int, string>
+     */
+    private function getAuthorList(): array
+    {
+        return Author::find()
+            ->select('full_name')
+            ->orderBy('full_name')
+            ->indexBy('id')
+            ->column();
     }
 }

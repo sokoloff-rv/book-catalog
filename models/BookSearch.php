@@ -44,7 +44,7 @@ class BookSearch extends Book
      */
     public function search($params, $formName = null)
     {
-        $query = Book::find();
+        $query = Book::find()->with('authors');
 
         // add conditions that should always apply here
 
@@ -70,7 +70,7 @@ class BookSearch extends Book
 
         if ($this->author_id !== null) {
             $query
-                ->joinWith('author')
+                ->joinWith('authors')
                 ->andWhere(['authors.id' => $this->author_id])
                 ->distinct();
         }

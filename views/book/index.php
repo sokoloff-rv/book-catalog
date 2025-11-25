@@ -49,6 +49,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Название',
             ],
             [
+                'label' => 'Авторы',
+                'value' => function (Book $model) {
+                    if (!$model->authors) {
+                        return 'Авторы не указаны';
+                    }
+
+                    $names = array_map(fn ($author) => $author->full_name, $model->authors);
+
+                    return implode(', ', $names);
+                },
+                'format' => 'ntext',
+            ],
+            [
                 'attribute' => 'publish_year',
                 'label' => 'Год выпуска',
                 'contentOptions' => ['style' => 'width: 130px'],
@@ -80,6 +93,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
 
 </div>
