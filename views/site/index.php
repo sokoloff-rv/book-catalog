@@ -48,7 +48,7 @@ $this->title = 'Добро пожаловать в каталог книг';
                 <p class="mb-3 text-muted">
                     ТОП-10 авторов по числу выпущенных книг за выбранный год.
                 </p>
-                <?= Html::a('Открыть отчёт', ['#'], ['class' => 'stretched-link disabled', 'tabindex' => -1, 'aria-disabled' => 'true']) ?>
+                <?= Html::a('Открыть отчёт', ['/report/top-authors'], ['class' => 'stretched-link']) ?>
             </div>
         </div>
     </div>
