@@ -1,25 +1,27 @@
 <?php
 
 use app\models\Author;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\AuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Authors';
+$this->title = 'Авторы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="author-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Author', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php if (Yii::$app->user->can('manageAuthors')): ?>
+        <p>
+            <?= Html::a('Добавить автора', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
+    <?php endif; ?>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -27,17 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'full_name',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'full_name',
+                'label' => 'ФИО',
+            ],
+            [
+                'label' => 'Книги',
+                'value' => fn (Author $model) => $model->getBook()->count(),
+                'contentOptions' => ['style' => 'width: 160px'],
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Author $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                 },
+                'visibleButtons' => [
+                    'update' => fn () => Yii::$app->user->can('manageAuthors'),
+                    'delete' => fn () => Yii::$app->user->can('manageAuthors'),
+                ],
             ],
         ],
     ]); ?>

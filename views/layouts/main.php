@@ -40,6 +40,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
+            ['label' => 'Книги', 'url' => ['/book/index']],
+            ['label' => 'Авторы', 'url' => ['/author/index']],
             Yii::$app->user->isGuest
                 ? [
                     'label' => 'Авторизация',

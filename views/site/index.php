@@ -23,27 +23,30 @@ $this->title = 'Добро пожаловать в каталог книг';
 
     <div class="row g-4">
         <div class="col-lg-4">
-            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm">
+            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm position-relative">
                 <h3 class="h5">Книги</h3>
                 <p class="mb-3 text-muted">
                     Каталог книг с названием, годом выпуска, описанием, ISBN и обложкой.
                 </p>
+                <?= Html::a('Перейти к списку книг', ['/book/index'], ['class' => 'stretched-link']) ?>
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm">
+            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm position-relative">
                 <h3 class="h5">Авторы</h3>
                 <p class="mb-3 text-muted">
                     Ищите книги по авторам, подписывайтесь на тех, кто вам нравится.
                 </p>
+                <?= Html::a('Перейти к списку авторов', ['/author/index'], ['class' => 'stretched-link']) ?>
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm">
+            <div class="h-100 p-4 border rounded-3 bg-white shadow-sm position-relative">
                 <h3 class="h5">Топ-10</h3>
                 <p class="mb-3 text-muted">
                     ТОП-10 авторов по числу выпущенных книг за выбранный год.
                 </p>
+                <?= Html::a('Открыть отчёт', ['#'], ['class' => 'stretched-link disabled', 'tabindex' => -1, 'aria-disabled' => 'true']) ?>
             </div>
         </div>
     </div>
