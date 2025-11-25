@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <div class="mb-4">
-        <?php if ($model->cover_path): ?>
-            <?= Html::img($model->cover_path, ['class' => 'img-responsive', 'style' => 'max-width: 100%; height: auto;']) ?>
+        <?php if ($model->coverUrl): ?>
+            <?= Html::img($model->coverUrl, ['class' => 'img-responsive', 'style' => 'max-width: 100%; height: auto;']) ?>
         <?php else: ?>
             <p class="text-muted">Обложка не добавлена</p>
         <?php endif; ?>

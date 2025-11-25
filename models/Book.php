@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "books".
@@ -94,4 +95,19 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasMany(SmsLog::class, ['book_id' => 'id']);
     }
 
+    public function getCoverUrl(): ?string
+    {
+        if (!$this->cover_path) {
+            return null;
+        }
+
+        // for external files
+        if (preg_match('~^(https?:)?//~', $this->cover_path)) {
+            return $this->cover_path;
+        }
+
+        $relativePath = ltrim($this->cover_path, '/');
+
+        return Url::to("@web/{$relativePath}");
+    }
 }
