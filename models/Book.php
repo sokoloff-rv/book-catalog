@@ -95,6 +95,11 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasMany(SmsLog::class, ['book_id' => 'id']);
     }
 
+    /**
+     * Returns the full URL of the book cover.
+     *
+     * @return string|null
+     */
     public function getCoverUrl(): ?string
     {
         if (!$this->cover_path) {
