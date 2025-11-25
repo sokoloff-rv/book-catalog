@@ -32,7 +32,7 @@ class SeedController extends Controller
             Author::deleteAll();
 
             $now = time();
-            $authorCount = max(30, (int)floor($bookCount / 2));
+            $authorCount = max(30, (int)floor($bookCount / 10));
             $authorIds = $this->createAuthors($faker, $authorCount, $now);
             $createdBooks = $this->createBooks($faker, $bookCount, $authorIds, $now);
 

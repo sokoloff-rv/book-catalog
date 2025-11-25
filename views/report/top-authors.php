@@ -8,6 +8,7 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Alert;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
 $this->title = 'Топ-10 авторов';
 ?>
@@ -58,7 +59,19 @@ $this->title = 'Топ-10 авторов';
                 [
                     'attribute' => 'book_count',
                     'label' => 'Книг за выбранный год',
-                    'contentOptions' => ['class' => 'text-center'],
+                    'format' => 'raw',
+                    'value' => static function (array $row) use ($model) {
+                        return Html::a(
+                            (string) $row['book_count'],
+                            [
+                                '/book/index',
+                                'BookSearch' => [
+                                    'author_id' => $row['author_id'],
+                                    'publish_year' => $model->year,
+                                ],
+                            ]
+                        );
+                    },
                 ],
             ],
         ]) ?>
