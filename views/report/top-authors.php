@@ -30,7 +30,6 @@ $this->title = 'Топ-10 авторов';
                 <?= $form->field($model, 'year')->dropDownList(
                     $availableYears ? array_combine($availableYears, $availableYears) : [],
                     [
-                        'prompt' => 'Выберите год',
                         'class' => 'form-select',
                         'onchange' => 'this.form.submit();',
                     ]

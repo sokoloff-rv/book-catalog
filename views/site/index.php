@@ -4,7 +4,7 @@
 
 use yii\bootstrap5\Html;
 
-$this->title = 'Добро пожаловать в каталог книг';
+$this->title = 'Каталог книг';
 ?>
 <div class="site-index py-5">
     <div class="p-5 mb-5 bg-light rounded-3 border">

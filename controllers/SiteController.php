@@ -73,6 +73,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            Yii::$app->session->setFlash('success', 'Авторизация прошла успешно!');
             return $this->goBack();
         }
 
@@ -94,6 +95,7 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && ($user = $model->signup())) {
             Yii::$app->user->login($user);
+            Yii::$app->session->setFlash('success', 'Регистрация прошла успешно, вы авторизованы на сайте!');
             return $this->goHome();
         }
 
