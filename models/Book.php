@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\Url;
 
 /**
@@ -22,7 +24,7 @@ use yii\helpers\Url;
  * @property int[] $authorIds
  * @property SmsLog[] $smsLogs
  */
-class Book extends \yii\db\ActiveRecord
+class Book extends ActiveRecord
 {
 
     /** @var int[] List of IDs of selected authors. */
@@ -39,11 +41,27 @@ class Book extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
             [['description', 'isbn', 'cover_path'], 'default', 'value' => null],
-            [['title', 'publish_year', 'created_at', 'updated_at'], 'required'],
+            [['title', 'publish_year'], 'required'],
             [['publish_year', 'created_at', 'updated_at'], 'integer'],
             [['description'], 'string'],
             [['title', 'cover_path'], 'string', 'max' => 255],

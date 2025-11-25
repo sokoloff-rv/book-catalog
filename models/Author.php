@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "authors".
@@ -16,7 +18,7 @@ use Yii;
  * @property Book[] $books
  * @property Subscription[] $subscriptions
  */
-class Author extends \yii\db\ActiveRecord
+class Author extends ActiveRecord
 {
 
 
@@ -31,10 +33,26 @@ class Author extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['full_name', 'created_at', 'updated_at'], 'required'],
+            [['full_name'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
             [['full_name'], 'string', 'max' => 255],
         ];
