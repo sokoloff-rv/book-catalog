@@ -35,7 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Книги',
-                'value' => fn (Author $model) => $model->getBook()->count(),
+                'value' => function (Author $model) {
+                    $bookCount = $model->getBook()->count();
+
+                    return Html::a(
+                        $bookCount,
+                        ['book/index', 'BookSearch' => ['author_id' => $model->id]]
+                    );
+                },
+                'format' => 'raw',
                 'contentOptions' => ['style' => 'width: 160px'],
             ],
             [

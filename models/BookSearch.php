@@ -11,13 +11,16 @@ use app\models\Book;
  */
 class BookSearch extends Book
 {
+    /** @var int|null */
+    public ?int $author_id = null;
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'publish_year', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'publish_year', 'created_at', 'updated_at', 'author_id'], 'integer'],
             [['title', 'description', 'isbn', 'cover_path'], 'safe'],
         ];
     }
@@ -64,6 +67,13 @@ class BookSearch extends Book
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        if ($this->author_id !== null) {
+            $query
+                ->joinWith('author')
+                ->andWhere(['authors.id' => $this->author_id])
+                ->distinct();
+        }
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
