@@ -20,7 +20,7 @@ class SeedController extends Controller
     /**
      * Заполняет базу тестовыми авторами и книгами.
      */
-    public function actionBooks(int $bookCount = 100): int
+    public function actionBooks(int $bookCount = 1000): int
     {
         $faker = Factory::create();
         $db = Yii::$app->db;

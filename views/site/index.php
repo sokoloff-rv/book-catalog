@@ -14,10 +14,12 @@ $this->title = 'Добро пожаловать в каталог книг';
             <p class="fs-5 mb-4">
                 Подписка на авторов для гостей, управление книгами и авторами для зарегистрированных пользователей, отчёт по самым продуктивным авторам за выбранный год.
             </p>
-            <div class="d-flex flex-wrap gap-3">
-                <?= Html::a('Войти', ['/site/login'], ['class' => 'btn btn-primary btn-lg']) ?>
-                <span class="align-self-center text-muted">или продолжить как гость для просмотра каталога</span>
-            </div>
+            <?php if (Yii::$app->user->isGuest): ?>
+                <div class="d-flex flex-wrap gap-3">
+                    <?= Html::a('Войти', ['/site/login'], ['class' => 'btn btn-primary btn-lg']) ?>
+                    <span class="align-self-center text-muted">или продолжить как гость для просмотра каталога</span>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
