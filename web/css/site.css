@@ -89,3 +89,7 @@ a.desc:after {
 .form-group {
     margin-bottom: 1rem;
 }
+
+td:last-child {
+    white-space: nowrap;
+}

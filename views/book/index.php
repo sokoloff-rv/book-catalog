@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Обложка',
                 'value' => function (Book $model) {
                     return $model->cover_path
-                        ? Html::img($model->cover_path, ['class' => 'img-thumbnail', 'style' => 'max-width: 90px'])
+                        ? Html::img($model->cover_path, ['class' => 'img-thumbnail', 'style' => 'width: 40px; height: 60px'])
                         : Html::tag('span', 'Нет обложки', ['class' => 'text-muted']);
                 },
                 'format' => 'raw',

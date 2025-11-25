@@ -54,13 +54,13 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'publish_year' => 'Publish Year',
-            'description' => 'Description',
-            'isbn' => 'Isbn',
-            'cover_path' => 'Cover Path',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'title' => 'Название',
+            'publish_year' => 'Год издания',
+            'description' => 'Описание',
+            'isbn' => 'ISBN',
+            'cover_path' => 'Ссылка на обложку',
+            'created_at' => 'Создано',
+            'updated_at' => 'Обновлено',
         ];
     }
 

@@ -47,9 +47,9 @@ class Author extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'full_name' => 'Full Name',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'full_name' => 'ФИО',
+            'created_at' => 'Создано',
+            'updated_at' => 'Обновлено',
         ];
     }
 
