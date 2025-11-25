@@ -102,7 +102,7 @@ class SeedController extends Controller
                 throw new Exception('Не удалось сохранить книгу.');
             }
 
-            $book->cover_path = "https://picsum.photos/seed/book{$book->id}/200/300";
+            $book->cover_path = "/index.php?r=image/cover&seed={$book->id}";
             $book->save(false);
 
             $authorsForBook = $faker->randomElements($authorIds, $faker->numberBetween(1, 3));
