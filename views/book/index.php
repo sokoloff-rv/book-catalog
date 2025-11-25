@@ -47,6 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'title',
                 'label' => 'Название',
+                'value' => static fn (Book $model) => Html::a(Html::encode($model->title), ['view', 'id' => $model->id]),
+                'format' => 'raw',
+                'contentOptions' => ['class' => 'link-in-cell'],
             ],
             [
                 'label' => 'Авторы',
@@ -55,11 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         return 'Авторы не указаны';
                     }
 
-                    $names = array_map(fn ($author) => $author->full_name, $model->authors);
+                    $names = array_map(
+                        fn ($author) => Html::a(Html::encode($author->full_name), ['author/view', 'id' => $author->id]),
+                        $model->authors
+                    );
 
                     return implode(', ', $names);
                 },
-                'format' => 'ntext',
+                'format' => 'raw',
+                'contentOptions' => ['class' => 'link-in-cell'],
             ],
             [
                 'attribute' => 'publish_year',

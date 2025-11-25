@@ -37,6 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'full_name',
                 'label' => 'ФИО',
+                'value' => static fn (Author $model) => Html::a(Html::encode($model->full_name), ['view', 'id' => $model->id]),
+                'format' => 'raw',
+                'contentOptions' => ['class' => 'link-in-cell'],
             ],
             [
                 'label' => 'Книги',

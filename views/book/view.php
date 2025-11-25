@@ -42,16 +42,25 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Авторы',
                 'value' => $model->authors
-                    ? implode(', ', array_map(fn ($author) => $author->full_name, $model->authors))
+                    ? implode(', ', array_map(
+                        fn ($author) => Html::a(Html::encode($author->full_name), ['author/view', 'id' => $author->id]),
+                        $model->authors
+                    ))
                     : 'Авторы не указаны',
-                'format' => 'ntext',
+                'format' => 'raw',
             ],
             'publish_year',
             'description:ntext',
             'isbn',
             'cover_path',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'created_at',
+                'format' => ['datetime', 'php:d.m.Y H:i'],
+            ],
+            [
+                'attribute' => 'updated_at',
+                'format' => ['datetime', 'php:d.m.Y H:i'],
+            ],
         ],
     ]) ?>
 

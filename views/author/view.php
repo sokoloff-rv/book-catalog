@@ -31,8 +31,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'full_name',
-            'created_at',
-            'updated_at',
+            [
+                'label' => 'Книги',
+                'value' => Html::a(
+                    $model->getBook()->count(),
+                    ['book/index', 'BookSearch' => ['author_id' => $model->id]]
+                ),
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'created_at',
+                'format' => ['datetime', 'php:d.m.Y H:i'],
+            ],
+            [
+                'attribute' => 'updated_at',
+                'format' => ['datetime', 'php:d.m.Y H:i'],
+            ],
         ],
     ]) ?>
 

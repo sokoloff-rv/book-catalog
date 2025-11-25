@@ -93,3 +93,7 @@ a.desc:after {
 td:last-child {
     white-space: nowrap;
 }
+
+.link-in-cell a {
+    color: #212529;
+}
