@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Book;
+use yii\bootstrap5\LinkPager;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -29,6 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pager' => [
+            'class' => LinkPager::class,
+            'options' => ['class' => 'pagination justify-content-center mt-4'],
+        ],
         'columns' => [
             [
                 'label' => 'Обложка',
