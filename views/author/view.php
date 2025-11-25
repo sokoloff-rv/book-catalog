@@ -1,6 +1,8 @@
 <?php
 
+use app\models\Subscription;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
@@ -15,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->user->can('manageAuthors')): ?>
-        <p>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+        <?php if (Yii::$app->user->can('manageAuthors')): ?>
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -25,8 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'method' => 'post',
                 ],
             ]) ?>
-        </p>
-    <?php endif; ?>
+        <?php endif; ?>
+
+        <?= Html::button('Подписаться на автора', [
+            'class' => 'btn btn-outline-success',
+            'data-bs-toggle' => 'modal',
+            'data-bs-target' => '#subscriptionModal',
+            'data-subscription-authors' => Json::htmlEncode([
+                ['id' => $model->id, 'name' => $model->full_name],
+            ]),
+            'data-return-url' => Yii::$app->request->url,
+        ]) ?>
+    </div>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -50,6 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['datetime', 'php:d.m.Y H:i'],
             ],
         ],
+    ]) ?>
+
+    <?= $this->render('//subscription/_modal', [
+        'subscriptionModel' => new Subscription(),
     ]) ?>
 
 </div>

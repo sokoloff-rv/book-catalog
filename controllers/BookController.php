@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Author;
 use app\models\Book;
 use app\models\BookSearch;
-use app\models\Author;
+use app\models\SmsLog;
+use app\models\Subscription;
+use app\services\SmsServiceInterface;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -15,6 +19,11 @@ use yii\filters\VerbFilter;
  */
 class BookController extends Controller
 {
+    public function __construct($id, $module, private readonly SmsServiceInterface $smsService, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * @inheritDoc
      */
@@ -83,6 +92,8 @@ class BookController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $this->notifySubscribers($model);
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -158,5 +169,60 @@ class BookController extends Controller
             ->orderBy('full_name')
             ->indexBy('id')
             ->column();
+    }
+
+    private function notifySubscribers(Book $book): void
+    {
+        $authorIds = $book->authorIds ?: $book->getAuthors()->select('id')->column();
+
+        if (!$authorIds) {
+            return;
+        }
+
+        $subscriptions = Subscription::find()
+            ->where(['author_id' => $authorIds])
+            ->all();
+
+        if (!$subscriptions) {
+            return;
+        }
+
+        $authorNames = Author::find()
+            ->select('full_name')
+            ->where(['id' => $authorIds])
+            ->column();
+
+        $message = sprintf(
+            'Новая книга "%s" (%s). Авторы: %s.',
+            $book->title,
+            $book->publish_year,
+            $authorNames ? implode(', ', $authorNames) : 'неизвестно'
+        );
+
+        foreach ($subscriptions as $subscription) {
+            $status = 'skipped';
+            $raw = null;
+
+            try {
+                $result = $this->smsService->send($subscription->phone, $message);
+                $status = $result['status'] ?? 'unknown';
+                $raw = $result['raw'] ?? null;
+            } catch (\Throwable $exception) {
+                $status = 'exception';
+                $raw = $exception->getMessage();
+            }
+
+            $log = new SmsLog([
+                'subscription_id' => $subscription->id,
+                'book_id' => $book->id,
+                'sent_at' => time(),
+                'status' => $status,
+                'provider_raw' => $raw ? (is_string($raw) ? $raw : json_encode($raw)) : null,
+            ]);
+
+            if (!$log->save()) {
+                Yii::error('Не удалось сохранить лог SMS: ' . json_encode($log->errors));
+            }
+        }
     }
 }

@@ -1,11 +1,13 @@
 <?php
 
 use app\models\Book;
+use app\models\Subscription;
 use yii\bootstrap5\LinkPager;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\StringHelper;
+use yii\helpers\Json;
 use yii\helpers\Url;
 
 /** @var yii\web\View $this */
@@ -89,6 +91,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'ntext',
             ],
             [
+                'label' => 'Подписка',
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'width: 200px'],
+                'value' => function (Book $model) {
+                    $authors = array_map(
+                        fn ($author) => ['id' => $author->id, 'name' => $author->full_name],
+                        $model->authors
+                    );
+
+                    $buttonOptions = [
+                        'class' => 'btn btn-outline-success btn-sm',
+                        'data-bs-toggle' => 'modal',
+                        'data-bs-target' => '#subscriptionModal',
+                        'data-subscription-authors' => Json::htmlEncode($authors),
+                        'data-return-url' => Yii::$app->request->url,
+                    ];
+
+                    if (!$authors) {
+                        $buttonOptions['disabled'] = true;
+                        $buttonOptions['title'] = 'У книги не указан автор';
+                    }
+
+                    return Html::button('Подписаться на автора', $buttonOptions);
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Book $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
@@ -100,5 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <?= $this->render('//subscription/_modal', [
+        'subscriptionModel' => new Subscription(),
+    ]) ?>
 
 </div>

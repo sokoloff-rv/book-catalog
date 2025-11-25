@@ -1,5 +1,8 @@
 <?php
 
+use app\services\SmsPilotService;
+use app\services\SmsServiceInterface;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -47,11 +50,20 @@ $config = [
             ],
         ],
         'db' => $db,
+        'smsService' => [
+            'class' => SmsPilotService::class,
+            'apiKey' => $params['smsPilotApiKey'],
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+    ],
+    'container' => [
+        'definitions' => [
+            SmsServiceInterface::class => SmsPilotService::class,
         ],
     ],
     'params' => $params,

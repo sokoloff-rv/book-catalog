@@ -5,7 +5,9 @@ use yii\bootstrap5\LinkPager;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\Url;
+use app\models\Subscription;
 
 /** @var yii\web\View $this */
 /** @var app\models\AuthorSearch $searchModel */
@@ -55,6 +57,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'width: 160px'],
             ],
             [
+                'label' => 'Подписка',
+                'format' => 'raw',
+                'contentOptions' => ['style' => 'width: 200px'],
+                'value' => function (Author $model) {
+                    return Html::button('Подписаться на автора', [
+                        'class' => 'btn btn-outline-success btn-sm',
+                        'data-bs-toggle' => 'modal',
+                        'data-bs-target' => '#subscriptionModal',
+                        'data-subscription-authors' => Json::htmlEncode([
+                            ['id' => $model->id, 'name' => $model->full_name],
+                        ]),
+                        'data-return-url' => Yii::$app->request->url,
+                    ]);
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Author $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
@@ -66,6 +84,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <?= $this->render('//subscription/_modal', [
+        'subscriptionModel' => new Subscription(),
+    ]) ?>
 
 
 </div>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "subscriptions".
@@ -20,6 +21,16 @@ use Yii;
 class Subscription extends \yii\db\ActiveRecord
 {
 
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => false,
+            ],
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -36,9 +47,12 @@ class Subscription extends \yii\db\ActiveRecord
     {
         return [
             [['user_id'], 'default', 'value' => null],
-            [['author_id', 'phone', 'created_at'], 'required'],
+            [['author_id', 'phone'], 'required'],
             [['author_id', 'user_id', 'created_at'], 'integer'],
+            [['created_at'], 'default', 'value' => fn () => time()],
+            [['phone'], 'trim'],
             [['phone'], 'string', 'max' => 32],
+            [['author_id', 'phone'], 'unique', 'targetAttribute' => ['author_id', 'phone'], 'message' => 'Эта подписка уже оформлена.'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Author::class, 'targetAttribute' => ['author_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -51,10 +65,10 @@ class Subscription extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'author_id' => 'Author ID',
-            'phone' => 'Phone',
-            'user_id' => 'User ID',
-            'created_at' => 'Created At',
+            'author_id' => 'Автор',
+            'phone' => 'Телефон',
+            'user_id' => 'Пользователь',
+            'created_at' => 'Создано',
         ];
     }
 
