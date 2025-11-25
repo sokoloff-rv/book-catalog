@@ -81,7 +81,7 @@ class LoginForm extends Model
 
     /**
      * Form field labels in Russian.
-     * 
+     *
      * @return array
      */
     public function attributeLabels()
