@@ -27,6 +27,10 @@ class SeedController extends Controller
         $transaction = $db->beginTransaction();
 
         try {
+            BookAuthor::deleteAll();
+            Book::deleteAll();
+            Author::deleteAll();
+
             $now = time();
             $authorCount = max(30, (int)floor($bookCount / 2));
             $authorIds = $this->createAuthors($faker, $authorCount, $now);
@@ -97,6 +101,9 @@ class SeedController extends Controller
             if (!$book->save(false)) {
                 throw new Exception('Не удалось сохранить книгу.');
             }
+
+            $book->cover_path = "https://picsum.photos/seed/book{$book->id}/200/300";
+            $book->save(false);
 
             $authorsForBook = $faker->randomElements($authorIds, $faker->numberBetween(1, 3));
             foreach ($authorsForBook as $authorId) {
