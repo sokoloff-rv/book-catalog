@@ -30,7 +30,7 @@ $this->title = 'Каталог книг';
                 <p class="mb-3 text-muted">
                     Каталог книг с названием, годом выпуска, описанием, ISBN и обложкой.
                 </p>
-                <?= Html::a('Перейти к списку книг', ['/book/index'], ['class' => 'stretched-link']) ?>
+                <?= Html::a('Перейти к списку книг', ['/book/index'], ['class' => 'btn btn-outline-primary']) ?>
             </div>
         </div>
         <div class="col-lg-4">
@@ -39,7 +39,7 @@ $this->title = 'Каталог книг';
                 <p class="mb-3 text-muted">
                     Ищите книги по авторам, подписывайтесь на тех, кто вам нравится.
                 </p>
-                <?= Html::a('Перейти к списку авторов', ['/author/index'], ['class' => 'stretched-link']) ?>
+                <?= Html::a('Перейти к списку авторов', ['/author/index'], ['class' => 'btn btn-outline-primary']) ?>
             </div>
         </div>
         <div class="col-lg-4">
@@ -48,7 +48,7 @@ $this->title = 'Каталог книг';
                 <p class="mb-3 text-muted">
                     ТОП-10 авторов по числу выпущенных книг за выбранный год.
                 </p>
-                <?= Html::a('Открыть отчёт', ['/report/top-authors'], ['class' => 'stretched-link']) ?>
+                <?= Html::a('Открыть отчёт', ['/report/top-authors'], ['class' => 'btn btn-outline-primary']) ?>
             </div>
         </div>
     </div>
