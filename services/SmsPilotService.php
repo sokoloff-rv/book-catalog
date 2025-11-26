@@ -20,7 +20,7 @@ class SmsPilotService extends Component implements SmsServiceInterface
         }
     }
 
-    public function send(string $phone, string $text): array
+    public function send(string $phone, string $text): SmsResult
     {
         $payload = [
             'apikey' => $this->apiKey,
@@ -45,25 +45,13 @@ class SmsPilotService extends Component implements SmsServiceInterface
         try {
             $result = file_get_contents($this->endpoint, false, $context);
         } catch (\Throwable $exception) {
-            return [
-                'success' => false,
-                'status' => 'exception',
-                'raw' => $exception->getMessage(),
-            ];
+            return new SmsResult(false, 'exception', $exception->getMessage());
         }
 
         if ($result === false) {
-            return [
-                'success' => false,
-                'status' => 'network_error',
-                'raw' => null,
-            ];
+            return new SmsResult(false, 'network_error');
         }
 
-        return [
-            'success' => true,
-            'status' => 'sent',
-            'raw' => $result,
-        ];
+        return new SmsResult(true, 'sent', $result);
     }
 }

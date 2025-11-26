@@ -1,5 +1,7 @@
 <?php
 
+use app\services\BookNotificationService;
+use app\services\BookNotificationServiceInterface;
 use app\services\SmsPilotService;
 use app\services\SmsServiceInterface;
 
@@ -64,6 +66,7 @@ $config = [
     'container' => [
         'definitions' => [
             SmsServiceInterface::class => SmsPilotService::class,
+            BookNotificationServiceInterface::class => BookNotificationService::class,
         ],
     ],
     'params' => $params,
